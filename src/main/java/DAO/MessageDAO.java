@@ -93,5 +93,23 @@ public class MessageDAO {
 
 
 
+
+
+
+    //  To delete a message by message id
+    public void deleteMessageByMessageId(int messageId)
+    {
+        Connection connection  = ConnectionUtil.getConnection();
+        try{
+            String sql = "DELETE FROM message where message_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, messageId);
+            preparedStatement.executeUpdate();
+        }       
+        catch(SQLException e)
+        {
+            System.out.println(e.getMessage());
+        }
+    }
     
 }

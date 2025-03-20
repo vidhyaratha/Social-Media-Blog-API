@@ -59,4 +59,16 @@ public class MessageService {
     {
         return messageDAO.retrieveMessageById(messageId);
     }
+
+
+
+
+    //  Delete message by message id
+    public Message deleteMessageById(int messageId)
+    {
+        Message messageToBeDeleted = messageDAO.retrieveMessageById(messageId);
+        messageDAO.deleteMessageByMessageId(messageId);
+        return messageToBeDeleted;
+    }
+
 }
