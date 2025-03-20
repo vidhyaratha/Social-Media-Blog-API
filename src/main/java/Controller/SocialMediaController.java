@@ -40,6 +40,7 @@ public class SocialMediaController {
         app.post("/register", this::postUserAccountRegistrationHandler);
         app.post("/login", this::postUserLoginHandler);
         app.post("/messages", this::postCreateNewMessageHandler);
+        app.get("/messages", this::getAllMessagesHandler);
 
         app.get("/accounts/{username}", this::getUserByUsernameHandler);
 
@@ -101,14 +102,14 @@ public class SocialMediaController {
 
 
     //  Get Handler to retrieve User by Username
-    private void getUserByUsernameHandler(Context context) throws JsonProcessingException
+    private void getUserByUsernameHandler(Context context)
     {
         context.json(accountService.getUsername(context.pathParam("username")));
     }
 
 
 
-    //Post Handler to create new message
+    //  Post Handler to create new message
     private void postCreateNewMessageHandler(Context context) throws JsonProcessingException
     {
         ObjectMapper mapper = new ObjectMapper();
@@ -122,6 +123,15 @@ public class SocialMediaController {
         {
             context.json(mapper.writeValueAsString(createdMessage));
         }
+    }
+
+
+
+
+    //  Get Handler to retrieve all messages
+    private void getAllMessagesHandler(Context context) 
+    {
+        context.json(messageService.getAllMessages());
     }
 
 

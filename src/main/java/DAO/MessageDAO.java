@@ -1,6 +1,8 @@
 package DAO;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import Model.Account;
 import Model.Message;
@@ -8,7 +10,7 @@ import Util.ConnectionUtil;
 
 public class MessageDAO {
 
-     // To create/compose a new Message
+    // To create/compose a new Message
     public Message composeNewMessage(Message message)
     {
         Connection connection = ConnectionUtil.getConnection();
@@ -52,5 +54,38 @@ public class MessageDAO {
         }
         return null;
     }
+
+
+
+
+
+     //  To retrieve all messages
+        public List<Message> retrieveAllMesssages()
+        {
+            Connection connection  = ConnectionUtil.getConnection();
+            List<Message> messages = new ArrayList<>();
+            try{
+                String sql = "SELECT * FROM message";
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while(resultSet.next())
+                {
+                    Message message = new Message(resultSet.getInt("message_id"), resultSet.getInt("posted_by"), resultSet.getString("message_text"), resultSet.getLong("time_posted_epoch"));
+                    messages.add(message);
+                }
+                }       
+                catch(SQLException e)
+                {
+                    System.out.println(e.getMessage());
+                }
+                return messages;   
+        }
+
+
+
+
+
+
+
     
 }
