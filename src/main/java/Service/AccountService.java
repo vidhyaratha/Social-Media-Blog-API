@@ -1,4 +1,5 @@
 package Service;
+
 import DAO.AccountDAO;
 import Model.Account;
 
@@ -41,4 +42,8 @@ public class AccountService {
     public Account getUsername(String username) {
         return accountDAO.retrieveUserByUsername(username);
     }
+
+
+
+
 }

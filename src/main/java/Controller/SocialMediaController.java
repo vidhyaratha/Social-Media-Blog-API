@@ -1,15 +1,14 @@
 package Controller;
 
-import static org.mockito.ArgumentMatchers.nullable;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.javalin.Javalin;
 import io.javalin.http.Context;
-
 import Model.Account;
+import Model.Message;
 import Service.AccountService;
+import Service.MessageService;
 
 /**
  * TODO: You will need to write your own endpoints and handlers for your controller. The endpoints you will need can be
@@ -19,14 +18,13 @@ import Service.AccountService;
 public class SocialMediaController {
 
     AccountService accountService;
+    
+    MessageService messageService;
 
     public SocialMediaController() {
         accountService = new AccountService();
+        messageService = new MessageService();
     }
-
-
-
-
 
 
 
@@ -41,7 +39,7 @@ public class SocialMediaController {
 
         app.post("/register", this::postUserAccountRegistrationHandler);
         app.post("/login", this::postUserLoginHandler);
-
+        app.post("/messages", this::postCreateNewMessageHandler);
 
         app.get("/accounts/{username}", this::getUserByUsernameHandler);
 
@@ -107,6 +105,30 @@ public class SocialMediaController {
     {
         context.json(accountService.getUsername(context.pathParam("username")));
     }
+
+
+
+    //Post Handler to create new message
+    private void postCreateNewMessageHandler(Context context) throws JsonProcessingException
+    {
+        ObjectMapper mapper = new ObjectMapper();
+        Message message = mapper.readValue(context.body(), Message.class);
+        Message createdMessage = messageService.createNewMessage(message);
+        if(createdMessage == null)
+        {
+            context.status(400);
+        }
+        else
+        {
+            context.json(mapper.writeValueAsString(createdMessage));
+        }
+    }
+
+
+
+
+
+
 
 
 

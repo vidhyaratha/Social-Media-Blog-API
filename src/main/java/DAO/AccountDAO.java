@@ -76,7 +76,7 @@ public class AccountDAO
     {
         Connection connection  = ConnectionUtil.getConnection();
         try{
-            String sql = "SELECT username, password FROM account where username = ?";
+            String sql = "SELECT * FROM account where username = ?";
             
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
         
@@ -94,9 +94,12 @@ public class AccountDAO
             {
                 System.out.println(e.getMessage());
             }
-            return null;
-            
+            return null;   
         }
+
+
+
+
 
 
 
