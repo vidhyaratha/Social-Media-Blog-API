@@ -16,17 +16,29 @@ public class AccountService {
 
     //  Adding/registering a new user account
     public Account addUserAccount(Account account) {
-        String username = account.getUsername();
-        if((!account.getUsername().isBlank()) && (account.getPassword().length()>=4))
+        Account usernameAlreadyExists = accountDAO.retrieveUserByUsername(account.getUsername());
+        if(usernameAlreadyExists == null)
         {
-            return accountDAO.registerUserAccount(account);
+           if((!account.getUsername().isBlank()) && (account.getPassword().length()>=4))
+            {
+                return accountDAO.registerUserAccount(account);
+            }
         }
-        else
-        {
         return null;
-        }
-        
     }
 
 
+
+    //  User Login
+    public Account userLogin(Account account) {
+            return accountDAO.logIntoUserAccount(account);
+    }
+
+
+
+
+    // Retrieve User By Username
+    public Account getUsername(String username) {
+        return accountDAO.retrieveUserByUsername(username);
+    }
 }

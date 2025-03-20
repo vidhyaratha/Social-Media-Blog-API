@@ -1,5 +1,7 @@
 package Controller;
 
+import static org.mockito.ArgumentMatchers.nullable;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -22,6 +24,12 @@ public class SocialMediaController {
         accountService = new AccountService();
     }
 
+
+
+
+
+
+
     /**
      * In order for the test cases to work, you will need to write the endpoints in the startAPI() method, as the test
      * suite must receive a Javalin object from this method.
@@ -32,9 +40,16 @@ public class SocialMediaController {
         app.get("example-endpoint", this::exampleHandler);
 
         app.post("/register", this::postUserAccountRegistrationHandler);
+        app.post("/login", this::postUserLoginHandler);
+
+
+        app.get("/accounts/{username}", this::getUserByUsernameHandler);
 
         return app;
     }
+
+
+
 
     /**
      * This is an example handler for an example endpoint.
@@ -44,7 +59,11 @@ public class SocialMediaController {
         context.json("sample text");
     }
 
-    //Post Handler for User Registration
+
+
+
+
+    //  Post Handler for User Registration
     private void postUserAccountRegistrationHandler(Context context) throws JsonProcessingException 
     {
         ObjectMapper mapper = new ObjectMapper();
@@ -59,6 +78,37 @@ public class SocialMediaController {
             context.json(mapper.writeValueAsString(registeredUserAccount));
         }
     }
+
+
+
+
+
+    //  Post Handler for User Login
+    private void postUserLoginHandler(Context context) throws JsonProcessingException
+    {
+        ObjectMapper mapper = new ObjectMapper();
+        Account account = mapper.readValue(context.body(), Account.class);
+        Account loggedInUser =  accountService.userLogin(account);
+        if(loggedInUser == null) {
+            context.status(401);
+        }
+        else 
+        {
+            context.json(mapper.writeValueAsString(loggedInUser));
+        }
+    }
+
+
+
+
+
+    //  Get Handler to retrieve User by Username
+    private void getUserByUsernameHandler(Context context) throws JsonProcessingException
+    {
+        context.json(accountService.getUsername(context.pathParam("username")));
+    }
+
+
 
 
 }
