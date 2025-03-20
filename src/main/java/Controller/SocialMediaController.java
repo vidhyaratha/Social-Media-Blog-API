@@ -41,6 +41,7 @@ public class SocialMediaController {
         app.post("/login", this::postUserLoginHandler);
         app.post("/messages", this::postCreateNewMessageHandler);
         app.get("/messages", this::getAllMessagesHandler);
+        app.get("/messages/{message_id}", this::getMessageByMessageId);
 
         app.get("/accounts/{username}", this::getUserByUsernameHandler);
 
@@ -136,6 +137,21 @@ public class SocialMediaController {
 
 
 
+
+    //  Get Handler to retreive a message by message id
+    private void getMessageByMessageId(Context context)
+    {
+        int msgId = Integer.parseInt(context.pathParam("message_id"));
+        if(messageService.getMessageById(msgId) != null)
+        {
+            context.json(messageService.getMessageById(Integer.parseInt(context.pathParam("message_id"))));
+        }
+        else
+        {
+            context.status(200);
+            context.result("");
+        }
+    }
 
 
 

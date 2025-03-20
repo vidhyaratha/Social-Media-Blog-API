@@ -34,8 +34,7 @@ public class MessageService {
         {
             return messageDAO.composeNewMessage(message);
         }
-        return null;
-        
+        return null;  
     }
 
 
@@ -46,4 +45,12 @@ public class MessageService {
         return messageDAO.retrieveAllMesssages();
     }
     
+
+
+
+    //  Get a message by message id
+    public Message getMessageById(int messageId)
+    {
+        return messageDAO.retrieveMessageById(messageId);
+    }
 }

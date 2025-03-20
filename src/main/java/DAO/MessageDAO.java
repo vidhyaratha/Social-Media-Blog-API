@@ -47,7 +47,7 @@ public class MessageDAO {
                     return new Message(genenerated_message_id, message.getPosted_by(),message.getMessage_text(), message.getTime_posted_epoch());
                     }
             }    
-            }   
+        }   
         catch(SQLException e)
         {
             System.out.println(e.getMessage());
@@ -60,30 +60,52 @@ public class MessageDAO {
 
 
      //  To retrieve all messages
-        public List<Message> retrieveAllMesssages()
+    public List<Message> retrieveAllMesssages()
+    {
+        Connection connection  = ConnectionUtil.getConnection();
+        List<Message> messages = new ArrayList<>();
+        try{
+            String sql = "SELECT * FROM message";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while(resultSet.next())
+            {
+                Message message = new Message(resultSet.getInt("message_id"), resultSet.getInt("posted_by"), resultSet.getString("message_text"), resultSet.getLong("time_posted_epoch"));
+                messages.add(message);
+            }
+        }       
+        catch(SQLException e)
+        {
+            System.out.println(e.getMessage());
+        }
+        return messages;   
+    }
+
+
+
+
+
+        //  To get a message by message id
+        public Message retrieveMessageById(int messageId)
         {
             Connection connection  = ConnectionUtil.getConnection();
-            List<Message> messages = new ArrayList<>();
             try{
-                String sql = "SELECT * FROM message";
+                String sql = "SELECT * FROM message where message_id = ?";
                 PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setInt(1,messageId);
                 ResultSet resultSet = preparedStatement.executeQuery();
                 while(resultSet.next())
                 {
-                    Message message = new Message(resultSet.getInt("message_id"), resultSet.getInt("posted_by"), resultSet.getString("message_text"), resultSet.getLong("time_posted_epoch"));
-                    messages.add(message);
+                  Message message = new Message(resultSet.getInt("message_id"), resultSet.getInt("posted_by"), resultSet.getString("message_text"), resultSet.getLong("time_posted_epoch"));
+                  return message;                   
                 }
-                }       
-                catch(SQLException e)
-                {
-                    System.out.println(e.getMessage());
-                }
-                return messages;   
+            }       
+            catch(SQLException e)
+            {
+                System.out.println(e.getMessage());
+            }
+            return null; 
         }
-
-
-
-
 
 
 
