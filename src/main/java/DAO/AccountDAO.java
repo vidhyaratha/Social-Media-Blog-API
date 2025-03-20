@@ -101,7 +101,32 @@ public class AccountDAO
 
 
 
-       
+       //  To retrieve the user account by account id
+       public Account retrieveUserAccountByAccountId(int id)
+    {
+        Connection connection  = ConnectionUtil.getConnection();
+        try{
+            String sql = "SELECT * FROM account where account_id = ?";
+            
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        
+            preparedStatement.setInt(1, id);
+    
+            ResultSet resultSet = preparedStatement.executeQuery();
+    
+                while(resultSet.next())
+                {
+                    Account account = new Account(resultSet.getInt("account_id"), resultSet.getString("username"), resultSet.getString("password"));
+                    return account;
+                }
+            }       
+            catch(SQLException e)
+            {
+                System.out.println(e.getMessage());
+            }
+            return null;   
+        }
+
 
 
 

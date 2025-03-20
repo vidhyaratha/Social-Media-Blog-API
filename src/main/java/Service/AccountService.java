@@ -36,14 +36,4 @@ public class AccountService {
     }
 
 
-
-
-    // Retrieve User By Username
-    public Account getUsername(String username) {
-        return accountDAO.retrieveUserByUsername(username);
-    }
-
-
-
-
 }

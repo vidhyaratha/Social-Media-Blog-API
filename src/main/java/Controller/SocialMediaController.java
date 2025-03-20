@@ -42,8 +42,7 @@ public class SocialMediaController {
         app.post("/messages", this::postCreateNewMessageHandler);
         app.get("/messages", this::getAllMessagesHandler);
         app.get("/messages/{message_id}", this::getMessageByMessageId);
-
-        app.get("/accounts/{username}", this::getUserByUsernameHandler);
+        
 
         return app;
     }
@@ -97,17 +96,6 @@ public class SocialMediaController {
             context.json(mapper.writeValueAsString(loggedInUser));
         }
     }
-
-
-
-
-
-    //  Get Handler to retrieve User by Username
-    private void getUserByUsernameHandler(Context context)
-    {
-        context.json(accountService.getUsername(context.pathParam("username")));
-    }
-
 
 
     //  Post Handler to create new message

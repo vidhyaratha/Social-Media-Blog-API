@@ -2,6 +2,7 @@ package Service;
 
 import DAO.MessageDAO;
 import Model.Message;
+import Model.Account;
 
 import java.util.List;
 
@@ -15,26 +16,31 @@ public class MessageService {
 
     public MessageService() {
         messageDAO = new MessageDAO();
+        accountDAO =new AccountDAO();
     }
 
     public MessageService(MessageDAO messageDAO) {
         this.messageDAO = messageDAO;
     }
 
-    public MessageService(AccountDAO accountDAO) {
-        this.accountDAO = accountDAO;
-    }
-
-
 
     // Create New Message
     public Message createNewMessage(Message message)
     {
-        if(!message.getMessage_text().isBlank() && message.getMessage_text().length() < 255)
+        Account existingAccount = accountDAO.retrieveUserAccountByAccountId(message.getPosted_by());
+        System.out.println("Existing Acc :" + existingAccount);
+        if(existingAccount != null)
         {
-            return messageDAO.composeNewMessage(message);
-        }
-        return null;  
+            if(!message.getMessage_text().isBlank() && message.getMessage_text().length() < 255)
+            {
+                 return messageDAO.composeNewMessage(message);
+            }
+            else
+            {
+                return null;
+            }
+         }  
+        return null;
     }
 
 
