@@ -71,4 +71,25 @@ public class MessageService {
         return messageToBeDeleted;
     }
 
+
+
+
+    //   Update a message by message id
+    public Message updateMessageById(String newMsg, int msgId)
+    {
+        Message messageIdExists = messageDAO.retrieveMessageById(msgId);
+        if(messageIdExists != null)
+        {
+            if(!newMsg.isBlank() && newMsg.length() < 255)
+            {
+                if(messageDAO.updateMessageById(newMsg, msgId))
+                {
+                    Message updatedMessage = messageDAO.retrieveMessageById(msgId);
+                    return updatedMessage;
+                }
+            }
+        }
+        return null;
+       
+    }
 }
