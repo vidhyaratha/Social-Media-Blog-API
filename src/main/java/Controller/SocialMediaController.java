@@ -1,5 +1,7 @@
 package Controller;
 
+import java.util.List;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -44,7 +46,7 @@ public class SocialMediaController {
         app.get("/messages/{message_id}", this::getMessageByMessageId);
         app.delete("/messages/{message_id}" , this::deleteMessageByMessageId);
         app.patch("/messages/{message_id}", this::patchUpdateMessageByIdHandler);  
-          
+        app.get("/accounts/{account_id}/messages", this::getAllMessagesFromAccountId);
 
         return app;
     }
@@ -166,13 +168,15 @@ public class SocialMediaController {
 
 
 
-    //  Update a message by message id
+    //  Update Handler to update a message by message id
     private void patchUpdateMessageByIdHandler(Context context) throws JsonProcessingException
     {
         ObjectMapper mapper = new ObjectMapper();
         Message message = mapper.readValue(context.body(), Message.class);
+
         int msgId = Integer.parseInt(context.pathParam("message_id"));
         String newMsg = message.getMessage_text();
+
         Message updatedMessage = messageService.updateMessageById(newMsg, msgId);
         if(updatedMessage != null)
         {
@@ -186,5 +190,14 @@ public class SocialMediaController {
 
 
 
+
+
+    //  Get Handler to get All the messages from user given account id
+    private void getAllMessagesFromAccountId(Context context)
+    {
+        int id = Integer.parseInt(context.pathParam("account_id"));
+        List<Message> userAccountMessages = messageService.getAllMessagesByAccountId(id);
+        context.json(userAccountMessages);
+    }
 
 }

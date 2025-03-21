@@ -78,18 +78,24 @@ public class MessageService {
     public Message updateMessageById(String newMsg, int msgId)
     {
         Message messageIdExists = messageDAO.retrieveMessageById(msgId);
-        if(messageIdExists != null)
+        if(messageIdExists != null && !newMsg.isBlank() && newMsg.length() < 255)
         {
-            if(!newMsg.isBlank() && newMsg.length() < 255)
+            if(messageDAO.updateMessageById(newMsg, msgId))
             {
-                if(messageDAO.updateMessageById(newMsg, msgId))
-                {
-                    Message updatedMessage = messageDAO.retrieveMessageById(msgId);
-                    return updatedMessage;
-                }
+                Message updatedMessage = messageDAO.retrieveMessageById(msgId);
+                return updatedMessage;
             }
         }
         return null;
-       
     }
+
+
+
+
+    //   Get Messages from User By Account id
+    public List<Message> getAllMessagesByAccountId(int accountId)
+    {
+        return messageDAO.retrieveAllMessagesByAccountId(accountId);
+    }
+
 }
